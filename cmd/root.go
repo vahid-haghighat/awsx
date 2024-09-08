@@ -15,7 +15,7 @@ var rootCmd = &cobra.Command{
 	Long:  `Retrieve short-living credentials via AWS SSO`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if versionFlag {
-			fmt.Printf("awsx version: %s\n", version.Version)
+			fmt.Printf("awsx version: v%s\n", version.Version)
 			return nil
 		}
 		return selectCmd.RunE(cmd, args)
