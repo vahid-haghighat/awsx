@@ -13,9 +13,10 @@ import (
 )
 
 var selectCmd = &cobra.Command{
-	Use:   "select",
-	Short: "Lets you select a profile from available profiles on AWS SSO",
-	Long:  `Lets you select a profile from available profiles on AWS SSO`,
+	Use:               "select",
+	Short:             "Lets you select a profile from available profiles on AWS SSO",
+	Long:              `Lets you select a profile from available profiles on AWS SSO`,
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) > 1 {
 			return errors.New("too many config names were specified. please pass only one config name")

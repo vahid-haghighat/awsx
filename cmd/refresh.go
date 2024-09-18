@@ -9,9 +9,10 @@ import (
 )
 
 var refreshCmd = &cobra.Command{
-	Use:   "refresh",
-	Short: "Refreshes your previously used credentials.",
-	Long:  `Refreshes your previously used credentials.`,
+	Use:               "refresh",
+	Short:             "Refreshes your previously used credentials.",
+	Long:              `Refreshes your previously used credentials.`,
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		configNames := []string{"default"}
 		if len(args) > 0 {

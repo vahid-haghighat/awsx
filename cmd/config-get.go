@@ -8,9 +8,10 @@ import (
 )
 
 var getConfigCmd = &cobra.Command{
-	Use:   "get",
-	Short: "Prints awsx's Configuration",
-	Long:  `Prints awsx's Configuration`,
+	Use:               "get",
+	Short:             "Prints awsx's Configuration",
+	Long:              `Prints awsx's Configuration`,
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		config, err := internal.ReadInternalConfig()
 		if err != nil {

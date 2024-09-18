@@ -6,9 +6,10 @@ import (
 )
 
 var configRemoveCmd = &cobra.Command{
-	Use:   "remove",
-	Short: "Removes awsx's Configuration",
-	Long:  `Removes awsx's Configuration`,
+	Use:               "remove",
+	Short:             "Removes awsx's Configuration",
+	Long:              `Removes awsx's Configuration`,
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		configNames := []string{"default"}
 		if len(args) > 0 {

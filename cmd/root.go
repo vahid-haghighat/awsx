@@ -10,9 +10,10 @@ import (
 var versionFlag bool
 
 var rootCmd = &cobra.Command{
-	Use:   "awsx",
-	Short: "Retrieve short-living credentials via AWS SSO",
-	Long:  `Retrieve short-living credentials via AWS SSO`,
+	Use:               "awsx",
+	Short:             "Retrieve short-living credentials via AWS SSO",
+	Long:              `Retrieve short-living credentials via AWS SSO`,
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if versionFlag {
 			fmt.Printf("v%s\n", version.Version)

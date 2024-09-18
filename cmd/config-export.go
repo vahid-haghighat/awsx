@@ -10,9 +10,10 @@ var configExportPath string
 
 // exportCmd represents the export command
 var exportCmd = &cobra.Command{
-	Use:   "export",
-	Short: "Exports awsx configs",
-	Long:  `Exports awsx configs`,
+	Use:               "export",
+	Short:             "Exports awsx configs",
+	Long:              `Exports awsx configs`,
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 		configExportPath, err = utilities.AbsolutePath(configExportPath)

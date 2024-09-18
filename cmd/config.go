@@ -10,10 +10,11 @@ import (
 )
 
 var configCmd = &cobra.Command{
-	Use:     "config",
-	Short:   "Configures awsx",
-	Long:    `Configures one or more AWS SSO configurations`,
-	Example: "awsx config my-sso-config",
+	Use:               "config",
+	Short:             "Configures awsx",
+	Long:              `Configures one or more AWS SSO configurations`,
+	Example:           "awsx config my-sso-config",
+	DisableAutoGenTag: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		configNames := []string{"default"}
 		if len(args) > 0 {
