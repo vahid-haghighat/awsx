@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	internal2 "github.com/vahid-haghighat/awsx/cmd/internal"
+	"github.com/vahid-haghighat/awsx/cmd/internal"
 	"github.com/vahid-haghighat/awsx/utilities"
 	"sort"
 	"strconv"
@@ -28,11 +28,11 @@ func init() {
 }
 
 func configArgs(configNames []string) error {
-	configs, _ := internal2.ReadInternalConfig()
+	configs, _ := internal.ReadInternalConfig()
 	if configs == nil || len(configs) == 0 {
-		configs = make(map[string]*internal2.Config)
+		configs = make(map[string]*internal.Config)
 	}
-	prompter := internal2.Prompter{}
+	prompter := internal.Prompter{}
 
 	for _, configName := range configNames {
 		if configName == "" {
@@ -41,10 +41,10 @@ func configArgs(configNames []string) error {
 
 		config, ok := configs[configName]
 		if !ok {
-			config = &internal2.Config{
+			config = &internal.Config{
 				Id:                    "",
 				SsoRegion:             "",
-				Profiles:              make(map[string]*internal2.Profile),
+				Profiles:              make(map[string]*internal.Profile),
 				LastUsedAccountsCount: 1,
 			}
 		}
@@ -109,7 +109,7 @@ func configArgs(configNames []string) error {
 
 			defaultRegion, found := config.Profiles[profileName]
 			if !found {
-				defaultRegion = &internal2.Profile{
+				defaultRegion = &internal.Profile{
 					Region: "",
 				}
 			}
@@ -124,7 +124,7 @@ func configArgs(configNames []string) error {
 				break
 			}
 
-			config.Profiles[profileName] = &internal2.Profile{
+			config.Profiles[profileName] = &internal.Profile{
 				Region: region,
 			}
 			profilesConfigured++
@@ -143,5 +143,5 @@ func configArgs(configNames []string) error {
 		configs[configName] = config
 	}
 
-	return internal2.WriteInternalConfig(configs)
+	return internal.WriteInternalConfig(configs)
 }

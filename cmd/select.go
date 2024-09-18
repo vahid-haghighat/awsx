@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/sso"
 	"github.com/aws/aws-sdk-go-v2/service/ssooidc"
 	"github.com/spf13/cobra"
-	internal2 "github.com/vahid-haghighat/awsx/cmd/internal"
+	"github.com/vahid-haghighat/awsx/cmd/internal"
 	"github.com/vahid-haghighat/awsx/utilities"
 	"log"
 	"time"
@@ -21,13 +21,13 @@ var selectCmd = &cobra.Command{
 			return errors.New("too many config names were specified. please pass only one config name")
 		}
 
-		configs, err := internal2.ReadInternalConfig()
+		configs, err := internal.ReadInternalConfig()
 		if err != nil {
 			if err = configCmd.RunE(cmd, args); err != nil {
 				return err
 			}
 
-			configs, err = internal2.ReadInternalConfig()
+			configs, err = internal.ReadInternalConfig()
 			if err != nil {
 				return err
 			}
@@ -39,9 +39,9 @@ var selectCmd = &cobra.Command{
 			configName = args[0]
 		}
 
-		var profile *internal2.Profile
+		var profile *internal.Profile
 		if len(configs[configName].Profiles) > 1 {
-			prompt := internal2.Prompter{}
+			prompt := internal.Prompter{}
 			profiles := utilities.Keys(configs[configName].Profiles)
 			index, _, err := prompt.Select("Select the profile", profiles, nil)
 			if err != nil {
@@ -63,7 +63,7 @@ var selectCmd = &cobra.Command{
 			return errors.New("no region is set for this profile")
 		}
 
-		oidcApi, ssoApi := internal2.InitClients(configs[configName])
+		oidcApi, ssoApi := internal.InitClients(configs[configName])
 		return start(configName, profile, oidcApi, ssoApi, configs[configName])
 	},
 }
@@ -72,13 +72,13 @@ func init() {
 	rootCmd.AddCommand(selectCmd)
 }
 
-func start(configName string, profile *internal2.Profile, oidcClient *ssooidc.Client, ssoClient *sso.Client, config *internal2.Config) error {
-	clientInformation, _ := internal2.ProcessClientInformation(configName, config.GetStartUrl(), oidcClient)
+func start(configName string, profile *internal.Profile, oidcClient *ssooidc.Client, ssoClient *sso.Client, config *internal.Config) error {
+	clientInformation, _ := internal.ProcessClientInformation(configName, config.GetStartUrl(), oidcClient)
 
-	promptSelector := internal2.Prompter{}
-	accountInfo := internal2.RetrieveAccountInfo(clientInformation, ssoClient, promptSelector)
-	roleInfo := internal2.RetrieveRoleInfo(accountInfo, clientInformation, ssoClient, promptSelector)
-	_ = internal2.SaveUsageInformation(configName, accountInfo, roleInfo)
+	promptSelector := internal.Prompter{}
+	accountInfo := internal.RetrieveAccountInfo(clientInformation, ssoClient, promptSelector)
+	roleInfo := internal.RetrieveRoleInfo(accountInfo, clientInformation, ssoClient, promptSelector)
+	_ = internal.SaveUsageInformation(configName, accountInfo, roleInfo)
 
 	rci := &sso.GetRoleCredentialsInput{AccountId: accountInfo.AccountId, RoleName: roleInfo.RoleName, AccessToken: &clientInformation.AccessToken}
 	roleCredentials, err := ssoClient.GetRoleCredentials(context.Background(), rci)
@@ -86,7 +86,7 @@ func start(configName string, profile *internal2.Profile, oidcClient *ssooidc.Cl
 		return err
 	}
 
-	err = internal2.WriteAwsConfigFile(profile.Name, config, roleCredentials.RoleCredentials)
+	err = internal.WriteAwsConfigFile(profile.Name, config, roleCredentials.RoleCredentials)
 	if err != nil {
 		return err
 	}

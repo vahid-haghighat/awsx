@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
-	internal2 "github.com/vahid-haghighat/awsx/cmd/internal"
+	"github.com/vahid-haghighat/awsx/cmd/internal"
 	"github.com/vahid-haghighat/awsx/utilities"
 )
 
@@ -18,13 +18,13 @@ var refreshCmd = &cobra.Command{
 			configNames = args
 		}
 
-		configs, err := internal2.ReadInternalConfig()
+		configs, err := internal.ReadInternalConfig()
 		if err != nil {
 			if err = configCmd.RunE(cmd, args); err != nil {
 				return err
 			}
 
-			configs, err = internal2.ReadInternalConfig()
+			configs, err = internal.ReadInternalConfig()
 			if err != nil {
 				return err
 			}
@@ -32,7 +32,7 @@ var refreshCmd = &cobra.Command{
 
 		var errs []error
 
-		prompter := internal2.Prompter{}
+		prompter := internal.Prompter{}
 
 	Configs:
 		for _, configName := range configNames {
@@ -46,7 +46,7 @@ var refreshCmd = &cobra.Command{
 				config = configs[configName]
 			}
 
-			var profile *internal2.Profile
+			var profile *internal.Profile
 			if len(configs[configName].Profiles) > 1 {
 				profiles := utilities.Keys(configs[configName].Profiles)
 				index, _, err := prompter.Select(fmt.Sprintf("Select the profile for config \"%s\"", configName), profiles, nil)
@@ -72,8 +72,8 @@ var refreshCmd = &cobra.Command{
 				continue Configs
 			}
 
-			oidcApi, ssoApi := internal2.InitClients(configs[configName])
-			err = internal2.RefreshCredentials(configName, profile, oidcApi, ssoApi, config, prompter)
+			oidcApi, ssoApi := internal.InitClients(configs[configName])
+			err = internal.RefreshCredentials(configName, profile, oidcApi, ssoApi, config, prompter)
 			if err != nil {
 				errs = append(errs, err)
 			}
